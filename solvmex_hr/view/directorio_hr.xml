@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding='ISO-8859-1' ?>
+<openerp>
+    <data>
+		<!-- Modificacion res_partner_address --> 
+		<record id="directorio_hr_form_solvmex" model="ir.ui.view">
+            <field name="name">hr.employee.solvmex.form.inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="priority">2</field>
+            <field name="arch" type="xml">
+				<form string="Employee" position="replace">
+					<group colspan="4" col="8">
+                        <group colspan="6" col="6">
+							<field colspan="6" name="name" />
+							<field name="user_id" on_change="onchange_user(user_id)"/>
+							<field name="clave" />
+							<field name="company_id" widget="selection" groups="base.group_multi_company,base.group_extended" on_change="onchange_company(company_id)"/>
+							<field name="active" groups="base.group_extended"/>
+							<newline/>
+							<field name="department_id" on_change="onchange_department_id(department_id)" />
+							<field name="parent_id" string="Jefe Directo"/>
+							<newline/>
+							<field name="sdo_dro" />
+							<field name="profesion" />
+							<field name="lugar_nacimiento" />
+							<newline/>
+							<field name="fecha_alta" />
+							<field name="fecha_baja" />
+                        </group>
+                        <group colspan="2" col="1">
+                          <field name="photo" widget='image' nolabel="1"/>
+                        </group>
+						<notebook colspan="8">
+							<page string="Personal Information">
+								<group col="2" colspan="2">
+									<separator string="Información de contacto corporativo" colspan="2"/>
+									<field name="partner_id" invisible="1" />
+									<!--<field name="address_id" colspan="2" on_change="onchange_address_id(address_id)" domain="[('partner_id', '=', partner_id)]"/>
+									-->
+									<field name="work_phone"/>
+									<field name="extension"/>
+									<field name="mobile_phone"/>
+									<field name="work_email" widget="email" />
+									<!--<field name="work_location"/>-->
+									<separator string="Información de contacto personal" colspan="2"/>
+									<field name="address_home_id" colspan="2"/>
+									<field name="telefono_casa"/>
+									<field name="telefono_emergencia"/>
+									<field name="celular_personal"/>
+									<field name="email_personal"/>
+								</group>
+								<group col="2" colspan="2" groups="base.group_hr_user">
+									<separator string="Status" colspan="2"/>
+									<field name="gender"/>
+									<field name="marital"/>
+									<field name="country_id"/>
+									<field name="birthday"/>
+								</group>
+							</page>
+							<page string="Información IDs">
+								<group col="2" colspan="2" >
+									<separator string="IDs" colspan="2"/>
+									<field name="curp"/>
+									<field name="rfc"/>
+									<field name="identification_id" string="IFE"/>
+									<field name="ssnid"/>
+									<field name="passport_id"/>
+									<field name="umf"/>
+									<field name="cred_infonavit"/>
+								</group>
+							</page>
+							<page string="Información Laboral">
+								<group col="2" colspan="2">
+									<separator string="Job Information" colspan="2"/>
+									<field name="job_id" domain="[('state','!=','old')]"/>
+									<field name="coach_id" />
+								</group>
+							</page>
+							<page string="Información Bancaria">
+								<group col="2" colspan="2">
+									<field name="clabe"/>
+									<field name="cuenta_hsbc" />
+								</group>
+							</page>
+							<page string="Categories" groups="base.group_hr_user">
+								<field name="category_ids" nolabel="1"/>
+							</page>
+							<page string="Notes" groups="base.group_hr_user">
+								<field colspan="4" nolabel="1" name="notes"/>
+							</page>
+						</notebook>
+					</group>
+				</form>
+			</field>
+		</record>
+    </data>
+</openerp>

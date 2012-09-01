@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="factura" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="210"/>
+	<parameter name="OERP_ID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[7]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Ricardo\\Dropbox\\Optimit\\OpenERP\\Proyectos\\muebleria\\Reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     account_invoice."number" AS account_invoice_number,
+     account_invoice."type" AS account_invoice_type,
+     account_invoice."amount_untaxed" AS account_invoice_amount_untaxed,
+     account_invoice."amount_total" AS account_invoice_amount_total,
+     account_invoice."amount_tax" AS account_invoice_amount_tax
+FROM
+     "account_invoice" account_invoice
+WHERE
+     account_invoice."type" = 'out_invoice'
+     and account_invoice."id" = $P{OERP_ID}]]>
+	</queryString>
+	<field name="account_invoice_number" class="java.lang.String"/>
+	<field name="account_invoice_type" class="java.lang.String"/>
+	<field name="account_invoice_amount_untaxed" class="java.math.BigDecimal"/>
+	<field name="account_invoice_amount_total" class="java.math.BigDecimal"/>
+	<field name="account_invoice_amount_tax" class="java.math.BigDecimal"/>
+	<variable name="direccion" class="java.lang.String">
+		<initialValueExpression><![CDATA[$F{res_partner_address_street}.toString()
++ " " +
+$F{res_partner_address_numext}.toString()
++ " " +
+$F{res_partner_address_numint}.toString()
++ " " +
+" Col. " +
+$F{codigo_nombre}.toString()
++ " C.P. " +
+$F{codigo}.toString()
+ + " , " +
+$F{municipio}.toString() + " " +
+$F{estado}.toString()]]></initialValueExpression>
+	</variable>
+	<variable name="acuenta" class="java.lang.String">
+		<variableExpression><![CDATA[$F{account_invoice_amount_total} - $F{account_residual}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="167" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="319" y="0" width="243" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{account_invoice_number}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd          MM        yyyy" isBlankWhenNull="true">
+				<reportElement x="297" y="115" width="265" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{account_invoice_date_invoice}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="152" splitType="Stretch"/>
+	</pageHeader>
+	<detail>
+		<band height="75" splitType="Stretch">
+			<subreport>
+				<reportElement x="-19" y="0" width="610" height="75"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="OERP_ID">
+					<subreportParameterExpression><![CDATA[$P{OERP_ID}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["repo:factura_lineas"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="148" splitType="Stretch">
+			<textField>
+				<reportElement x="359" y="71" width="213" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{account_invoice_amount_untaxed}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="359" y="128" width="213" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{account_invoice_amount_total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="359" y="99" width="213" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{account_invoice_amount_tax}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

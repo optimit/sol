@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<openerp>
+    <data>
+        <record id="view_laboratorio_corte_tree" model="ir.ui.view">
+            <field name="name">laboratorio.corte.solvmex.tree</field>
+            <field name="model">laboratorio.corte</field>
+            <field name="type">tree</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <tree string="Programacion de cobros" >
+					<field name="name" />
+                    <field name="fecha_corte"/>
+                    <field name="comentarios"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_laboratorio_corte_filter" model="ir.ui.view">
+            <field name="name">laboratorio.corte.solvmex.filter</field>
+            <field name="model">laboratorio.corte</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Buscar rutas de cobro">
+				<field name="name"/>
+				<field name="fecha_corte"/>
+				<newline/>
+               </search>
+            </field>
+        </record>
+		<record id="laboratorio_corte_solvmex" model="ir.ui.view">
+            <field name="name">laboratorio.corte.solvmex.form</field>
+            <field name="model">laboratorio.corte</field>
+            <field name="type">form</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+			<form string="Listado de corte">
+                    <field name="name" colspan="2" required="1"/>
+					<field name="fecha_corte" required="1"/>
+					<button colspan="4" name="obtener_productos" string="Actualizar pedidos de hoy" type="object" icon="terp-gtk-go-back-rtl"/>
+					<button colspan="4" name="obtener_productos_atrasados" string="Agregar pedidos PENDIENTES de un día anterior" type="object" icon="terp-gtk-go-back-rtl"/>
+					<group colspan="6">
+					<field name="pedidos"  colspan="6"/>
+					</group>
+
+					<newline/>
+					<field name="comentarios"/>
+
+            </form>
+			</field>
+        </record>
+        <record id="action_laboratorio_corte" model="ir.actions.act_window">
+            <field name="name">Listado de cortes</field>
+            <field name="res_model">laboratorio.corte</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+			<field name="search_view_id" ref="view_laboratorio_corte_filter"/>
+            <field eval="False" name="view_id"/>
+            <field name="help">Ayuda a reprogramar la fecha de cobro de acuerdo a los dias de pago del cliente.</field>
+        </record>
+        <menuitem id="base.laboratorio_menu" name="Laboratorio" sequence="0" icon="terp-tools"
+            />
+        <menuitem icon="terp-partner"
+            id="base.menu_base_laboratorio" name="Laboratorio"
+            sequence="0" groups="base.laboratorio,base.vendedor"/>
+
+        <menuitem id="base.laboratorio_corte" name="Listado de cortes"
+            parent="base.menu_base_laboratorio" sequence="1"
+            />
+        <menuitem action="action_laboratorio_corte" id="menu_action_laboratorio_corte" parent="base.laboratorio_corte"/>
+
+
+    </data>
+</openerp>

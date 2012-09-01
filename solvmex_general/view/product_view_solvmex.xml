@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding='ISO-8859-1' ?>
+<openerp>
+    <data>
+        <record id="view_product_tree_solvmex" model="ir.ui.view">
+            <field name="name">product.normal.tree.solvmex</field>
+            <field name="model">product.product</field>
+            <field name="type">tree</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+<tree colors="red:virtual_available&lt;0;blue:virtual_available&gt;=0 and state in ('draft', 'end', 'obsolete');black:virtual_available&gt;=0 and state not in ('draft', 'end', 'obsolete')" string="Products">
+                    <field name="default_code"/>
+                    <field name="name"/>
+                    <field name="categ_id" invisible="1"/>
+                    <field name="variants" groups="product.group_product_variant"/>
+                    <field name="uom_id" string="UoM"/>
+                    <field name="type"/>
+                    <field name="qty_available"/>
+                    <field name="virtual_available"/>
+                    <field name="lst_price" groups="base.coordinador_ventas" />
+                    <field name="price" invisible="not context.get('pricelist',False)"/>
+                    <field name="standard_price" groups="base.coordinador_ventas"/>
+                    <field name="state" groups="base.group_extended"/>
+                    <field name="company_id" groups="base.group_multi_company" invisible="1"/>
+                </tree>
+            
+            </field>
+        </record>
+		<record id="product_product_form_solvmex" model="ir.ui.view">
+            <field name="name">product.normal.form.solvmex</field>
+            <field name="model">product.product</field>
+            <field name="type">form</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+			<form string="Product">
+                   <group colspan="4" col="8">
+                    <group colspan="4" col="6">
+                        <separator string="Name" colspan="4"/>
+						<newline/>
+                        <field name="name"/>
+                        <field groups="product.group_product_variant" name="variants"/>
+						<newline/>
+                        <separator string="Codes" colspan="4"/>
+						<newline/>
+                        <field name="default_code"/>
+                        <field name="ean13" />
+                    </group>
+                    <group colspan="1" col="2">
+                        <separator string="Characteristics" colspan="2"/>
+                        <field name="sale_ok"/>
+                        <field name="purchase_ok"/>
+                    </group>
+
+                   </group>
+
+                    <notebook colspan="4">
+                        <page string="Information">
+                            <group colspan="2" col="2" >
+                                <separator string="Weights" colspan="2"/>
+								<field name="densidad" />
+								<field name="capacidad_lt" on_change="capacidad_kg(densidad,capacidad_lt)" />
+								<field name="capacidad_kg" />
+								
+								<newline />
+                            </group>
+                            <group colspan="2" col="2">
+                                <separator string="Base Prices" colspan="2"/>
+                                <field name="list_price"/>
+                                <field groups="base.group_extended" name="cost_method"/>
+                                <field name="standard_price"  string="Precio de compra" attrs="{'readonly':[('cost_method','=','average')]}" groups="base.coordinador_ventas"/>
+								<field name="moneda_costo" groups="base.coordinador_ventas"/>
+								<field name="costo_reposicion" groups="base.coordinador_ventas"/>
+								<newline/>
+                                <field name="price_margin" groups="product.group_product_variant"/>
+                                <field name="price_extra" groups="product.group_product_variant"/>
+                            </group>
+
+
+
+                            <group colspan="2" col="2" name="status" >
+                                <separator string="Status" colspan="2"/>
+                                <field name="categ_id"/>
+                                <field name="state"/>
+                                <field name="product_manager"/>
+                            </group>
+
+                            <group colspan="2" col="2" name="uom">
+                                <separator string="Unit of Measure" colspan="2"/>
+                                <field name="uom_id" on_change="onchange_uom(uom_id,uom_po_id)"/>
+                                <field name="uom_po_id" groups="base.group_extended"/>
+                            </group>
+
+                            <group colspan="2" col="2" name="uos" groups="product.group_uos">
+                                <separator string="Second UoM" colspan="2"/>
+                                <field name="uos_id"/>
+                                <field name="uos_coeff"/>
+                                <field name="mes_type"/>
+                            </group>
+                            <group colspan="2" col="2">
+                                <separator string="Procurement" colspan="2"/>
+                                <field name="type"/>
+                                <field name="procure_method" groups="base.group_extended"/>
+                                <field name="supply_method"/>
+                            </group>
+                        </page>
+                        <page string="Procurement &amp; Locations">
+                            <group colspan="2" col="2" name="delay">
+                                <separator string="Delays" colspan="2"/>
+                                <field name="sale_delay" attrs="{'readonly':[('sale_ok','=',0)]}"/>
+                                <field name="produce_delay"/>
+                                <field name="warranty"/>
+                            </group>
+                            <group colspan="2" col="2" name="store">
+                                <separator string="Storage Localisation" colspan="2"/>
+                                <field name="loc_rack" string="Tanque" attrs="{'readonly':[('type','=','service')]}"/>
+                                <field name="loc_row" string="Carril" attrs="{'readonly':[('type','=','service')]}"/>
+                                <field name="loc_case" string="Contenedor" attrs="{'readonly':[('type','=','service')]}"/>
+                            </group>
+
+                            <group colspan="2" col="2" name="misc" groups="base.group_extended">
+                                <separator string="Miscellaneous" colspan="2"/>
+                                <field name="active"/>
+                                <field name="company_id" groups="base.group_multi_company" widget="selection"/>
+                            </group>
+
+                        </page>
+                        <page string="Suppliers" groups="base.group_extended">
+                            <field colspan="4" name="seller_ids" nolabel="1" context="{'uom_id': uom_id}"/>
+                        </page>
+                        <page string="Descriptions" groups="base.group_extended">
+                            <separator string="Description"/>
+                            <field colspan="4" name="description" nolabel="1"/>
+                            <separator string="Sale Description"/>
+                            <field colspan="4" name="description_sale" nolabel="1"/>
+                            <separator string="Purchase Description"/>
+                            <field colspan="4" name="description_purchase" nolabel="1"/>
+                        </page>
+						<page string="Lista de precios" groups="base.coordinador_ventas,base.group_extended">
+							<separator string="Precios por escala"/>
+							<field colspan="4" name="escala_precio_ids" nolabel="1"/>
+						</page>
+
+                    </notebook>
+                </form>
+			</field>
+        </record>
+
+		
+		<record id="product_lista_precio_solvmex" model="ir.ui.view">
+            <field name="name">product.lista_precio.solvmex</field>
+            <field name="model">product.lista_precio</field>
+            <field name="type">form</field>
+            <field name="priority">2</field>
+            <field name="arch" type="xml">
+				<field colspan="2" name="name"  />
+				<field colspan="2" name="piezas_minimo" required="1" on_change="nombre(name,piezas_minimo,porcentaje)"/>
+				<field colspan="4" name="porcentaje" required="1" on_change="nombre(name,piezas_minimo,porcentaje)"/>
+			</field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_coordinador_ventas_1,credito.programacion_cobros,model_credito_programacion_cobros,base.coordinador_ventas,1,0,0,0
+access_vendedor_9,credito.programacion_cobros,model_credito_programacion_cobros,base.vendedor,1,0,0,0
+access_credito_12,credito.programacion_cobros,model_credito_programacion_cobros,base.credito,1,1,1,1

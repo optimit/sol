@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding='ISO-8859-1' ?>
+<openerp>
+    <data>
+		<!-- Modificacion res_partner --> 
+		<record id="partner_form_solvmex" model="ir.ui.view">
+            <field name="name">res.partner.solvmex.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="priority">2</field>
+            <field name="arch" type="xml">
+				<page string="General" position="after">
+					 <page string="Calificaciones de cliente">
+						<group colspan="4">
+							<field name="calif_ventas" string="Calificacion de Ventas" colspan="2"/>
+							<newline />
+							<field name="notas_ventas" string="Notas de Ventas"/>
+							<newline />
+							<field name="calif_credito" string="Calificacion de Crédito" colspan="2"/>
+							<newline />
+							<field name="notas_credito" string="Notas de Crédito"/>
+							<newline />
+							<field name="calif_trafico" string="Calificación de Tráfico" colspan="2"/>
+							<newline />
+							<field name="notas_trafico" string="Notas de Tráfico"/>
+						</group>
+						<group colspan="4">
+							<separator colspan="8" string="Clasificación cliente"/>
+							<field  colspan="8" name="category_id" nolabel="1"/>
+						</group>
+					 </page>
+				</page>
+				<page string="Calificaciones de cliente" position="after">
+					 <page string="Dirección fiscal">
+						<group colspan="4" col="6">
+							<field name="calle_df" colspan="6"/>
+							<field name="noexterior_df"/>
+							<field name="nointerior_df"/>
+							<field name="codigopostal_df"/>
+							<field name="colonia_df"/>
+							<field name="localidad_df"/>
+							<field name="municipio_df"/>
+							<field name="estado_df"/>
+							<field name="pais_df"/>
+						</group>
+					 </page>
+				</page>
+				<page string="General" position="replace">
+					<page string="Direcciones de entrega">
+						<field colspan="4" mode="form,tree" name="address" nolabel="1" select="1" height="260">
+							<form string="Partner Contacts">
+								<group colspan="4" col="6">
+									<field name="name"/>
+									<field domain="[('domain', '=', 'contact')]" name="title" size="0" widget="selection"/>
+									<field name="function" string="Puesto"/>
+									<newline/>
+									<field name="entrega" string="Comentarios entrega" colspan="6"/>
+								</group>
+								<newline/>
+								  <group colspan="2" col="4">
+									<separator string="Dirección de envío" colspan="4" col="4" />
+									<field name="type" colspan="2" string="Tipo de dirección"/>
+									<field name="street" colspan="4" string="Calle y número" />
+									<field name="street2" colspan="4" string="Colonia"/>
+									<field name="zip" colspan="2" string="Código postal"/>
+									<field name="city" colspan="2"/>
+									<field name="municipio" colspan="2" string="Municipio/Delegación"/>
+									<field name="estado" colspan="2" />
+								 </group>
+								 <group colspan="2" col="4">
+									<separator string="Communication" colspan="4" col="4" />
+									<field name="phone" string="Teléfono fijo" colspan="2"/>
+									<field name="mobile" string="Celular"/>
+									<field name="fax"/>
+									<field name="email" widget="email"/>
+								 </group>
+							</form>
+						</field>
+					</page>
+				</page>
+			</field>
+        </record>		
+		
+		<!-- Modificacion res_partner  cabecera--> 
+		<record id="partner_form_solvmex2" model="ir.ui.view">
+			<field name="name">res.partner.solvmex.form.inherit2</field>
+			<field name="model">res.partner</field>
+			<field name="type">form</field>
+			<field name="inherit_id" ref="solvmex_general.partner_form_solvmex"/>
+			<field name="priority">2</field>
+			<field name="arch" type="xml">
+
+				<xpath expr="//field[@name='name']" position="replace"> 
+					<field name="state" readonly="1"/>
+					<field name="name" select="1" string="Razón social" colspan="6"/>
+					<newline/>
+				</xpath>
+				<xpath expr="//field[@name='name']" position="after"> 
+					<field name="nomcom" colspan="4"/>
+				</xpath>
+				<xpath expr="//field[@name='title']" position="replace"> 
+					<field domain="[('domain', '=', 'partner')]" name="title" size="0"  widget="selection" string="Régimen"/>
+				</xpath>
+				<xpath expr="//field[@name='lang']" position='replace'/>
+				<xpath expr="//field[@name='title']" position="after"> 
+					<field name="rfc"/>
+					<newline/>
+					<field name="email_ventas" string="Email compras"/>
+					<field name="email_facturas" />
+					<field name="email_almacen"/>
+					<field name="telefono_1" string="Teléfono"/>
+					<field name="telefono_2" string="Teléfono 2"/>
+					<field name="fax" string="Fax"/>
+					<button name="autoriza_credito" states="borrador" type="object" string="Alta de cliente autorizada - credito"  groups="base.credito" colspan="4" icon="gtk-apply"/>
+					<button name="autoriza_conta" states="aut_credito" type="object" string="Alta de cliente autorizada - contabilidad"  groups="base.contabilidad" colspan="4" icon="gtk-go-forward"/>
+					<button name="bloqueo_cliente" states="activo" type="object" string="Bloqueo de cliente" icon="gtk-cancel" colspan="4"  groups="base.credito"/>
+					<button name="cancela_cliente" states="bloqueado"  type="object" string="Baja definitiva de cliente" icon="gtk-cancel" colspan="4" groups="base.credito" />
+					<button name="reactivar_cliente" states="bloqueado,cancelado" type="object" string="Reactivacion de cliente" icon="gtk-apply" colspan="4"  groups="base.credito"/>
+
+				</xpath>
+				<xpath expr="//field[@name='user_id']" position="replace"> 
+					<field name="user_id" string="Vendedor"/>
+				</xpath>
+				<xpath expr="//field[@name='comment']" position="after"> 
+					<field name="tipo" string="Tipo de cliente"/>
+					<newline/>
+					<field name="dias" string="Dias de crédito" help=" Debe sustituirse por property_payment_term"/>
+					<field name="revision" string="Revisión de facturas"/>
+					<field name="pagos" string="Dias de pago"/>
+					<newline/>
+					<field name="clasificacion" string="Clasificación cliente"/>
+					<newline/>
+					<field name="bloqueado"/>
+					<field name="bloqueado_nota"/>
+				</xpath>
+				<xpath expr="//field[@name='user_id']" position="after"> 
+					<field name="ultima_compra" string="Última compra"/>
+				</xpath>
+			</field>
+		</record>
+		
+		<!-- Modificacion de vista para proveedores-->
+		<record id="view_partner_solvmex_proveedorform" model="ir.ui.view">
+            <field name="name">res.partner.solvmex.proveedor.form</field>
+            <field name="model">res.partner</field>
+            <field name="type">form</field>
+			<field name="priority">2</field>
+            <field name="arch" type="xml">
+                <form string="Partners" col='1'>
+                    <group col="6" colspan="4">
+                        <group colspan="5" col="6">
+                            <field name="name" select="1" string="Razón social" colspan="6"/>
+							<field name="nomcom" colspan="4"/>
+                            <field name="ref" groups="base.group_extended"/>
+                            <field domain="[('domain', '=', 'partner')]" name="title" size="0"  widget="selection" string="Régimen"/>
+                            <field name="rfc"/>
+							<newline/>
+							<field name="email_ventas" string="Email ventas"/>
+							<field name="email_facturas" />
+							<field name="email_almacen"/>
+							<field name="telefono_1" string="Teléfono"/>
+							<field name="telefono_2" string="Teléfono 2"/>
+							<field name="fax" string="Fax"/>
+                        </group>
+                        <group colspan="1" col="2">
+                            <field name="customer" select="1"/>
+                            <field name="supplier"/>
+							<!-- <field name="employee"/>-->
+                        </group>
+                    </group>
+                    <notebook colspan="4">
+                        <page string="Direcciones de planta">
+							<field colspan="4" mode="form,tree" name="address" nolabel="1" select="1" height="260">
+								<form string="Partner Contacts">
+									<group colspan="4" col="6">
+										<field name="name"/>
+										<field domain="[('domain', '=', 'contact')]" name="title" size="0" widget="selection"/>
+										<field name="function" string="Puesto"/>
+										<newline/>
+										<field name="entrega" string="Comentarios entrega" colspan="6"/>
+									</group>
+									<newline/>
+									  <group colspan="2" col="4">
+										<separator string="Dirección de planta" colspan="4" col="4" />
+										<field name="type" colspan="2" string="Tipo de dirección"/>
+										<field name="street" colspan="4" string="Calle y número" />
+										<field name="street2" colspan="4" string="Colonia"/>
+										<field name="zip" colspan="2" string="Código postal"/>
+										<field name="city" colspan="2"/>
+										<field name="municipio" colspan="2" string="Municipio/Delegación"/>
+										<field name="estado" colspan="2" />
+									 </group>
+									 <group colspan="2" col="4">
+										<separator string="Communication" colspan="4" col="4" />
+										<field name="phone" string="Teléfono fijo" colspan="2"/>
+										<field name="mobile" string="Celular"/>
+										<field name="fax"/>
+										<field name="email" widget="email"/>
+									 </group>
+								</form>
+							</field>
+						</page>
+						<page string="Calificaciones de proveedor">
+							<group colspan="4">
+								<field name="calif_ventas" string="Calificacion de Ventas" colspan="2"/>
+								<newline />
+								<field name="notas_ventas" string="Notas de Ventas"/>
+								<newline />
+								<field name="calif_credito" string="Calificacion de Crédito" colspan="2"/>
+								<newline />
+								<field name="notas_credito" string="Notas de Crédito"/>
+								<newline />
+								<field name="calif_trafico" string="Calificación de Tráfico" colspan="2"/>
+								<newline />
+								<field name="notas_trafico" string="Notas de Tráfico"/>
+							</group>
+							<group colspan="4">
+								<separator colspan="8" string="Clasificación cliente"/>
+								<field  colspan="8" name="category_id" nolabel="1"/>
+							</group>
+						</page>
+						<page string="Dirección fiscal">
+							<group colspan="4" col="6">
+								<field name="calle_df" colspan="6"/>
+								<field name="noexterior_df"/>
+								<field name="nointerior_df"/>
+								<field name="codigopostal_df"/>
+								<field name="colonia_df"/>
+								<field name="localidad_df"/>
+								<field name="municipio_df"/>
+								<field name="estado_df"/>
+								<field name="pais_df"/>
+							</group>
+						</page>
+                        <page string="Sales &amp; Purchases">
+                            <separator string="General Information" colspan="4"/>
+                            <field name="user_id" string="Vendedor"/>
+                            <field name="active" groups="base.group_extended"/>
+                            <field name="website" widget="url"/>
+                            <field name="date"/>
+                            <field name="parent_id" groups="base.group_extended"/>
+                            <field name="company_id" groups="base.group_multi_company" widget="selection"/>
+                            <newline/>
+                        </page>
+                        <page string="History" groups="base.group_extended" invisible="True">
+                        </page>
+                        <page string="Notes">
+                            <field colspan="4" name="comment" nolabel="1"/>
+							<field name="tipo" string="Tipo de cliente"/>
+							<newline/>
+							<field name="ultima_compra" string="Última compra"/>
+							<newline />
+							<field name="bloqueado"/>
+							<field name="bloqueado_nota"/>
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+		
+		<!-- Modificacion res_partner  lista--> 
+		<record id="partner_list_mexico" model="ir.ui.view">
+			<field name="name">res.partner.mexico.list.inherit</field>
+			<field name="model">res.partner</field>
+			<field name="type">tree</field>
+			<field name="inherit_id" ref="base.view_partner_tree"/>
+			<field name="priority">28</field>
+			<field name="arch" type="xml">
+						<xpath expr="//field[@name='country']" position="replace"/> 
+				<xpath expr="//field[@name='user_id']" position="replace"> 
+							<field name="user_id" string="Ejecutivo asignado"/>
+				</xpath>
+			</field>
+		</record>
+				
+		<!-- Modificacion res_partner_address --> 
+		<record id="res_partner_address_mexico" model="ir.ui.view"> 
+			<field name="name">res.partner.address.mexico</field> 
+			<field name="model">res.partner.address</field> 
+			<field name="inherit_id" ref="base.view_partner_address_form1"/> 
+			<field name="arch" type="xml"> 
+				<xpath expr="//form[@string='Address']" position="replace"> 
+					<form string="Address">
+						<group colspan="4" col="6">
+							<field name="partner_id" colspan="2"/>
+							<field name="company_id" groups="base.group_multi_company" widget="selection" colspan="2"/>
+							<newline/>
+							<field name="name" colspan="2"/>
+							<field domain="[('domain', '=', 'contact')]" name="title" widget="selection" colspan="2" />
+							<field name="function" colspan="2" string="Puesto"/>
+							<field name="entrega" colspan="4"/>
+						</group>
+						<group colspan="2" col="6">
+							<separator string="Postal Address" colspan="6" col="4"/>
+							<field name="type" colspan="2" string="Tipo de dirección"/>
+							<field name="street" colspan="4" string="Calle y número"/>
+							<field name="street2" colspan="4" string="Colonia"/>
+							<field name="city" colspan="4"/>
+							<field name="zip" colspan="4"/>
+							<field name="municipio" colspan="2"  string="Municipio/Delegación"/>
+							<field name="estado" colspan="2" />
+						</group>
+						<group colspan="2" col="4">
+							<separator string="Communication" colspan="4" col="4"/>
+								<field name="phone" string="Teléfono fijo" colspan="2"/>
+								<field name="mobile" string="Celular"/>
+								<field name="fax"/>
+								<field name="email" widget="email"/>
+						</group>
+					</form>
+				</xpath>
+			</field>
+		</record>
+    </data>
+</openerp>

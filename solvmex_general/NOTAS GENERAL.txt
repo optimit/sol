@@ -1,0 +1,16 @@
+Notas para General.
+
+Para que cargue las vistas personalizadas de producto (form y tree) hay que modificar manualmente las "Acciones de ventana" para el objeto product.product, 
+hay que cambiar las vistas a las que apunta el menu Ordenación de la vista por el nombre de las vistas personalizadas. 
+
+Las siguietnes vistas heredan a la original, hay que modificarlas para que los cambios aparezcan en la nueva vista:
+ 	product.normal.form.inherit 
+	product.normal.form.orderpoint.inherit 
+ 	product.normal.stock.form.inherit 
+	product.normal.stock.property.form.inherit 
+ 	product.product.standard.price.form.inherit 
+	product.normal.stock.acc.property.form.inherit
+	
+Vistas modificadas:
+product.normal.form.orderpoint.inherit -> Se incluyo groups="base.group_extended" en el grupo de stock minimo
+product.normal.stock.form.inherit	   -> Se elimino groups="base.group_extended" del grupo stock_variations

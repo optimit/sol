@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<openerp>
+    <data>
+        <record id="view_order_tree_solvmex" model="ir.ui.view">
+            <field name="name">sale.order.solvmex.tree</field>
+            <field name="model">sale.order</field>
+            <field name="type">tree</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <tree string="Sales Orders" colors="blue:state in ('waiting_date','manual');red:state in ('invoice_except','shipping_except','cancel');black:state in ('confirmado');green:state in ('ventas','credito')">
+                    <field name="name"/>
+                    <field name="date_order"/>
+                    <field name="partner_id"/>
+                    <field name="user_id"/>
+                    <field name="picked_rate" widget="progressbar"/>
+                    <field name="invoiced_rate" widget="progressbar"/>
+                    <field name="amount_untaxed" sum="Total Tax Excluded"/>
+                    <field name="amount_total" sum="Total Tax Included"/>
+					<field name="pricelist_id"/>
+					<field name="state"/>
+                    
+                </tree>
+            </field>
+        </record>
+
+		<record id="sale_order_solvmex" model="ir.ui.view">
+            <field name="name">sale.order.solvmex.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="type">form</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+			<form string="Sales Order">
+			  <group col="10" colspan="2">
+                            <field name="state" widget="statusbar" statusbar_visible="draft,confirmado,ventas,credito,manual,progress,done" statusbar_colors="{&quot;shipping_except&quot;:&quot;red&quot;,&quot;invoice_except&quot;:&quot;red&quot;,&quot;waiting_date&quot;:&quot;blue&quot;}" colspan="10"/>
+                            </group>
+                    <group col="6" colspan="4">
+                        <group col="4" colspan="4">
+                            <field colspan="4" name="partner_id" options="{&quot;quick_create&quot;: false}" on_change="onchange_partner_id(partner_id)" domain="[('customer','=',True)]" context="{'search_default_customer':1}" required="1"  />
+                            <newline/>
+                            <field colspan="4" domain="[('partner_id','=',partner_id)]" name="partner_shipping_id"  string="Direccion de entrega" on_change="onchange_partner_address(partner_shipping_id)" options="{&quot;quick_create&quot;: false}"/>
+                            <field domain="[('partner_id','=',partner_id)]" name="partner_order_id" groups="base.group_extended" on_change="onchange_partner_order_id(partner_order_id, partner_invoice_id, partner_shipping_id)" options="{&quot;quick_create&quot;: false}" invisible="1"/>
+                            <field domain="[('partner_id','=',partner_id)]" name="partner_invoice_id" groups="base.group_extended" options="{&quot;quick_create&quot;: false}" invisible="1"/>
+                            
+                            <field name="project_id" context="{'partner_id':partner_id, 'contact_id':partner_order_id, 'pricelist_id':pricelist_id, 'default_name':name}" groups="analytic.group_analytic_accounting" domain="[('parent_id','!=',False)]"/>
+                            <newline/>
+                            <field name="payment_term" colspan="4" widget="selection"/>
+                           <field name="encabezado_cotizacion" colspan="4" groups="base.vendedor,base.coordinador_ventas"/>
+                        </group>
+                        <group col="2" colspan="2" groups="base.group_extended">
+                            <field name="invoiced"/>
+                            <field name="shipped"/>
+							<field name="segundo_viaje" colspan="1" />
+                            <field domain="[('type','=','sale')]" name="pricelist_id" string="Moneda" groups="base.group_extended" on_change="onchange_pricelist_id(pricelist_id,order_line)" colspan="2"/>
+                            <field name="tipo_cambio" />
+                        </group>
+                    </group>				
+
+
+                    <notebook colspan="5">
+                        <page string="Sales Order">
+                            <field name="name" string="Folio / Número de pedido"/>
+                            <field name="date_order"/>
+                            <field name="shop_id" on_change="onchange_shop_id(shop_id)" widget="selection" groups="base.group_extended" invisible="1"/>
+							<field name="user_id" readonly="1" string="Vendedor"/>
+                            <field name="client_order_ref" string="Orden de compra cliente" required="1"/>
+							<field name="comentarios_entrega" string="Notas entrega (trafico)" colspan="1" />
+							<field name="forma_envio" colspan="1" on_change="onchange_forma_envio(forma_envio)" />
+							<field name="forma_envio_texto" colspan="1" invisible="1" />
+							<field name="notas_dpto_credito" colspan="1" groups="base.credito" />
+							<newline/>
+                            <field colspan="4" name="order_line" nolabel="1" widget="one2many_list">
+                                <form string="Sales Order Lines">
+                                    <notebook>
+                                        <page string="Order Line">
+                                        <group colspan="4" col="5">
+										
+                                       <field colspan="2"
+												default_focus="1"
+                                                context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'shop':parent.shop_id, 'uom':product_uom}"
+                                                required="1"
+												name="product_id"
+                                                on_change="product_id_change(parent.pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, True, parent.date_order, product_packaging, parent.fiscal_position, False, context)"/>
+										<field name="name" colspan="2" string="Etiquetar / facturar como: "/>
+                                        <field name="divisa"  colspan="2" invisible="1"/>
+										<newline/>
+										<field name="tambores"  colspan="1" on_change="onchange_tambores(tambores)"/>
+										<field name="densidad" colspan="2" />
+										<field name="tipo_envio" colspan="1" attrs="{'invisible':[('tambores','!=','otro')]}"/>
+										<field colspan="2" name="calculadora_tambor" string="Calculadora de tambores" on_change="calcular_tambores(product_id, calculadora_tambor,tipo_envio,product_uom,divisa)" required="1" attrs="{'invisible':[('tipo_envio','!=','tambor')]}" />
+										<newline/>
+										<group colspan="5" col="6">
+										<field colspan="2"
+                                        name="product_uom_qty" on_change="calcular_cantidad(product_id, cantidad_tambor,tambores,product_uom_qty, product_uom,divisa)" />
+                                        <field colspan="2" name="product_uom"
+                                                 nolabel="1" on_change="calcular_unidad(product_id, cantidad_tambor,tipo_envio,product_uom_qty,product_uom,divisa)" />
+										<field name="cantidad_tambor"  colspan="2"/>
+										</group>
+												 <newline/>
+
+                                            <!--- <field name="price_unit" string="Precio de venta" on_change="calcular_utilidad(product_uom,price_unit,product_id)"/> -->
+											<field name="price_unit" string="Precio de venta" />
+											<field name="discount" invisible="1" />
+											<field name="precio_lista" string="Precio de referencia"/>
+											<field name="utilidad" groups="base.coordinador_ventas" readonly="1"/>
+											<field name="utilidad_porcentaje" groups="base.coordinador_ventas" readonly="1"/>
+											<field groups="product.group_uos" name="product_uos_qty" invisible="1"/>
+                                            <field groups="product.group_uos" name="product_uos" nolabel="1" invisible="1"/>
+                                            <newline/>
+                                            <field name="product_packaging"
+                                                context="{'partner_id':parent.partner_id, 'quantity':product_uom_qty, 'pricelist':parent.pricelist_id, 'shop':parent.shop_id, 'uom':product_uom}" on_change="product_packaging_change(parent.pricelist_id, product_id, product_uom_qty, product_uom, parent.partner_id, product_packaging, True, context)"
+                                                domain="[('product_id','=',product_id)]" groups="base.group_extended"
+                                                colspan="3" invisible="1"/>
+                                            
+                                            <separator colspan="5" string="Notas sobre producto para cliente *"/>
+                                            <field colspan="5" name="notes" nolabel="1"/>
+                                            <separator colspan="5" string="Taxes"/>
+                                            <field colspan="5" name="tax_id" nolabel="1" domain="[('parent_id','=',False),('type_tax_use','&lt;&gt;','purchase')]"/>
+                                            <group colspan="5" col="5" groups="base.group_extended">
+                                                <separator colspan="5" string="States"/>
+                                                <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done" statusbar_colors="{&quot;exception&quot;:&quot;red&quot;,&quot;cancel&quot;:&quot;red&quot;}"/>
+                                                <field name="invoiced"/>
+                                                <group attrs="{'invisible':[('invoiced','=',True)]}">
+                                                    <button colspan="1" name="361" states="confirmed" string="Make Invoices" type="action" icon="terp-document-new"/>
+                                                </group>
+                                            </group>
+                                        </group>
+                                        </page>
+                                        <page groups="base.group_extended" string="Extra Info">
+                                            <field name="type"/>
+                                            <field name="delay"/>
+                                            <field name="th_weight"/>
+                                            <field name="address_allotment_id"/>
+                                            <separator colspan="4" string="Properties"/>
+                                            <field name="property_ids" colspan="4" nolabel="1"/>
+                                        </page>
+                                        <page string="History" groups="base.group_extended">
+                                            <separator colspan="4" string="Invoice Lines"/>
+                                            <field colspan="4" name="invoice_lines" nolabel="1"/>
+                                            <separator colspan="4" string="Stock Moves"/>
+                                            <field colspan="4" name="move_ids" nolabel="1" widget="many2many"/>
+                                        </page>
+                                    </notebook>
+                                </form>
+                                <tree string="Sales Order Lines">
+                                    <field colspan="4" name="name"/>
+                                    <field name="product_uom_qty" string="Qty(UoM)"/>
+                                    <field name="product_uom" string="UoM"/>
+                                    <field name="discount" invisible="1"/>
+									<field name="tambores" />
+                                    <field name="price_unit"/>
+                                    <field name="price_subtotal"/>
+									<field name="utilidad" groups="base.coordinador_ventas" />
+                                </tree>
+                            </field>
+                            <newline/>
+                            <group col="13" colspan="10">
+                                <field name="amount_untaxed" sum="Untaxed amount"/>
+                                <field name="amount_tax"/>
+                                <field name="amount_total"/>
+                                <button name="button_dummy" states="draft" string="Compute" type="object" icon="gtk-execute"/>
+                                <button name="359" string="Advance Invoice" type="action" icon="gtk-execute" states="draft,manual" groups="base.group_extended" invisible="1"/>
+                            </group>
+
+								<newline/>
+									<field name="condiciones_venta" colspan="2" groups="base.vendedor,base.coordinador_ventas"/>
+
+								<group col="17" colspan="4">
+
+								<button name="invoice_recreate" states="invoice_except" string="Recreate Invoice" icon="gtk-go-forward"/>
+                                <button name="invoice_corrected" states="invoice_except" string="Ignore Exception" icon="gtk-apply"/>
+                                <button name="ship_recreate" states="shipping_except" string="Recreate Packing" icon="gtk-ok"/>
+                                <button name="ship_corrected" states="shipping_except" string="Ignore Exception" icon="gtk-apply"/>
+                                <button name="action_cancel" states="manual,progress" string="Cancel Order" type="object" icon="gtk-cancel"/>
+                                <button name="419" string="Imprimir pedido" type="action" icon="gtk-print" states="waiting_date,manual,progress,done,shipping_except,invoice_except,credito,confirmado,ventas"/>
+                                <button name="manual_invoice" states="manual" string="Create Final Invoice" icon="gtk-go-forward" type="object"/>
+                                <button name="ship_cancel" states="shipping_except" string="Cancel Order" icon="gtk-cancel"/>
+                                <button name="action_cancel_draft" states="cancel" string="Set to Draft" type="object" icon="gtk-convert"/>
+                                <button name="cancel" states="draft" string="Cancel Order" icon="gtk-cancel"/>
+                                <button name="invoice_cancel" states="invoice_except" string="Cancel Order" icon="gtk-cancel"/>
+                                <button name="419" string="Imprimir cotizacion" type="action" icon="gtk-print" states="draft"/>
+								
+								
+                                <button name="order_confirm" states="credito" string="Confirm Order" icon="gtk-apply"/>
+								<button name="confirmar" states="draft" string="Confirmar" icon="gtk-apply" groups="base.vendedor"/>
+								<button name="cancela_vendedor" type="object" states="confirmado,ventas,credito" string="Cancelar pedido vendedor" icon="gtk-cancel" colspan="2"  groups="base.vendedor"/>
+                                <button name="autoriza_ventas" states="confirmado" string="Autorizar ventas" icon="gtk-apply" colspan="2"  groups="base.coordinador_ventas"/>
+								<button name="cancela_ventas" states="confirmado" string="Rechazado ventas" icon="gtk-cancel" colspan="2"  groups="base.coordinador_ventas"/>
+								<newline/>
+								<button name="cancela_credito" states="ventas" string="Rechazado Credito" icon="gtk-cancel" colspan="2"  groups="base.credito"/>
+                                <button name="autoriza_credito" states="ventas" string="Pagado /Credito autorizado" icon="gtk-apply" colspan="2"  groups="base.credito"/>
+								
+
+                            </group>
+
+								<group col="17" colspan="4">
+								<field name="aut_ventas"/>
+								<field name="p_aut_ventas"/>
+								<newline/>
+								<field name="aut_credito"/>
+								<field name="p_aut_credito"/>
+								<newline/>
+
+								
+								</group>
+                        </page>
+                        <page string="Other Information">
+                            <separator colspan="4" string="Notas generales SOLVMEX"/>
+                            <field colspan="4" name="note" nolabel="1"/>
+                            <group colspan="2" col="2" groups="base.group_extended" name="logistics">
+                                <separator string="Logistic" colspan="2"/>
+                                <field name="incoterm" widget="selection" invisible="1"/>
+                                <field name="picking_policy" required="True" invisible="1"/>
+                                <field name="order_policy" on_change="shipping_policy_change(order_policy)" invisible="1"/>
+                                <field name="invoice_quantity" attrs="{'readonly':[('order_policy','in',('prepaid','picking'))]}" invisible="1"/>
+                            </group>
+                            <group colspan="2" col="2">
+                                <separator string="References" colspan="2"/>
+                                
+                                <field groups="base.group_extended" name="origin"/>
+                            </group>
+                            <group colspan="2" col="2" groups="base.group_extended">
+                                <separator string="Conditions" colspan="2"/>
+                                
+                                <field name="fiscal_position" widget="selection" invisible="1"/>
+                                <field name="company_id" widget="selection" groups="base.group_multi_company"/>
+                            </group>
+                            <group colspan="2" col="2" groups="base.group_extended">
+                                <separator string="Dates" colspan="2"/>
+                                <field name="create_date"/>
+                                <field name="date_confirm"/>
+                            </group>
+
+                        </page>
+                        <page string="History" groups="base.group_extended">
+                            <separator colspan="4" string="Invoices"/>
+                            <field colspan="4" name="invoice_ids" nolabel="1" context="{'form_view_ref':'account.invoice_form'}"/>
+                            <separator colspan="4" string="Salidas de almacen"/>
+                            <field colspan="4" name="picking_ids" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </form>
+			</field>
+        </record>
+		
+    </data>
+</openerp>

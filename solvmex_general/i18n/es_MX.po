@@ -1,0 +1,16 @@
+# Translation of OpenERP Server.
+# Archivo contiene la adaptacion de traduccion:
+#	* base
+#
+msgid ""
+msgstr ""
+
+#. module: base
+#: field:res.partner.address,name:0
+msgid "Contact Name"
+msgstr "Nombre"
+
+#. module: base
+#: field:res.partner,name:5
+msgid "Name"
+msgstr "Razon social"

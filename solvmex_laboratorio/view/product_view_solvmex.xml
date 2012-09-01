@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding='ISO-8859-1' ?>
+<openerp>
+    <data>
+        <record id="view_product_laboratorio_solvmex" model="ir.ui.view">
+            <field name="name">product.laboratorio.tree.solvmex</field>
+            <field name="model">product.laboratorio</field>
+            <field name="type">tree</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+				<tree string="Especificaciones para productos">
+                    <field name="name"/>
+                    <field name="comentarios"/>
+                </tree>
+            
+            </field>
+        </record>
+		<record id="product_laboratorio_form_solvmex" model="ir.ui.view">
+            <field name="name">product.laboratorio.form.solvmex</field>
+            <field name="model">product.laboratorio</field>
+            <field name="type">form</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+			<form string="Especificaciones para productos">
+             <field name="name" colspan="4" required="1"/>
+                    <notebook colspan="8">
+					<page string="Documentos">
+						
+						<newline/>
+                        <separator string="Archivos" colspan="4"/>
+						<newline/>
+						<separator string="Hoja de seguridad" colspan="2"/>
+						<field name="hoja_seguridad_nombre" />
+						<newline/>
+                        <field name="hoja_seguridad" nolabel="1" colspan="2" filename="hoja_seguridad_nombre" />
+						<newline/>
+						<separator string="Hoja tecnica" colspan="2"/>
+						<field name="hoja_tecnica_nombre"  />
+						<newline/>
+                        <field name="hoja_tecnica" nolabel="1" colspan="2" filename="hoja_tecnica_nombre" />
+						<newline/>
+                        <separator string="Comentarios" colspan="4"/>
+                        <field name="comentarios" nolabel="1" colspan="4"/>
+					</page>
+                        <page string="Rombo de seguridad">
+						<separator colspan="5" string="Informacion para el Rombo de seguridad"/>
+						<field name="toxicidad" />
+						<newline/>
+						<field name="incendio"  />
+						<newline/>
+						<field name="reactividad"  />
+						<newline/>
+						<field name="epp" />
+						<newline/>
+						<field name="lote"/>
+						<newline/>
+						<field name="codigo_etiqueta"/>
+						 </page>
+                        <page string="Certificado de análisis Químico">
+						<separator colspan="5" string="Informacion para el certificado de analisis clinico"/>
+						<field name="analisis" string="Tipo de análisis" colspan="4" />
+						<newline/>
+						<separator string="Análisis"/>
+						<separator string="Método"/>
+						<separator string="Resultado"/>
+						<separator string="Especificación"/>
+						<field name="analisis_1" nolabel="1" />
+						<field name="metodo_1" nolabel="1" />
+						<field name="resultado_1" nolabel="1" />
+						<field name="especificacion_1" nolabel="1" />
+						<newline/>
+						<field name="analisis_2" nolabel="1" />
+						<field name="metodo_2" nolabel="1" />
+						<field name="resultado_2" nolabel="1" />
+						<field name="especificacion_2" nolabel="1" />
+						<newline/>
+						<field name="analisis_3" nolabel="1" />
+						<field name="metodo_3" nolabel="1" />
+						<field name="resultado_3" nolabel="1" />
+						<field name="especificacion_3" nolabel="1" />
+						<newline/>
+						<field name="analisis_4" nolabel="1" />
+						<field name="metodo_4" nolabel="1" />
+						<field name="resultado_4" nolabel="1" />
+						<field name="especificacion_4" nolabel="1" />
+						<newline/>
+						<field name="analisis_5" nolabel="1" />
+						<field name="metodo_5" nolabel="1" />
+						<field name="resultado_5" nolabel="1" />
+						<field name="especificacion_5" nolabel="1" />
+						<newline/>
+						<field name="analisis_6" nolabel="1" />
+						<field name="metodo_6" nolabel="1" />
+						<field name="resultado_6" nolabel="1" />
+						<field name="especificacion_6" nolabel="1" />
+						<newline/>
+						<field name="analisis_7" nolabel="1" />
+						<field name="metodo_7" nolabel="1" />
+						<field name="resultado_7" nolabel="1" />
+						<field name="especificacion_7" nolabel="1" />
+						<newline/>
+						<field name="analisis_8" nolabel="1" />
+						<field name="metodo_8" nolabel="1" />
+						<field name="resultado_8" nolabel="1" />
+						<field name="especificacion_8" nolabel="1" />
+						<newline/>
+						<field name="analisis_9" nolabel="1" />
+						<field name="metodo_9" nolabel="1" />
+						<field name="resultado_9" nolabel="1" />
+						<field name="especificacion_9" nolabel="1" />
+						<newline/>
+						<field name="analisis_10" nolabel="1" />
+						<field name="metodo_10" nolabel="1" />
+						<field name="resultado_10" nolabel="1" />
+						<field name="especificacion_10" nolabel="1" />
+						<newline/>
+						<field name="analisis_11" nolabel="1" />
+						<field name="metodo_11" nolabel="1" />
+						<field name="resultado_11" nolabel="1" />
+						<field name="especificacion_11" nolabel="1" />
+						<newline/>
+						<field name="analisis_12" nolabel="1" />
+						<field name="metodo_12" nolabel="1" />
+						<field name="resultado_12" nolabel="1" />
+						<field name="especificacion_12" nolabel="1" />
+						<newline/>
+						<field name="analisis_13" nolabel="1" />
+						<field name="metodo_13" nolabel="1" />
+						<field name="resultado_13" nolabel="1" />
+						<field name="especificacion_13" nolabel="1" />
+						<newline/>
+						<field name="analisis_14" nolabel="1" />
+						<field name="metodo_14" nolabel="1" />
+						<field name="resultado_14" nolabel="1" />
+						<field name="especificacion_14" nolabel="1" />
+						<newline/>
+						<field name="analisis_15" nolabel="1" />
+						<field name="metodo_15" nolabel="1" />
+						<field name="resultado_15" nolabel="1" />
+						<field name="especificacion_15" nolabel="1" />
+						<newline/>
+						<field name="analisis_16" nolabel="1" />
+						<field name="metodo_16" nolabel="1" />
+						<field name="resultado_16" nolabel="1" />
+						<field name="especificacion_16" nolabel="1" />
+						<newline/>
+						<field name="analisis_17" nolabel="1" />
+						<field name="metodo_17" nolabel="1" />
+						<field name="resultado_17" nolabel="1" />
+						<field name="especificacion_17" nolabel="1" />
+						
+						<newline/>
+						<separator colspan="5" string="Comentarios"/>
+						<field name="observaciones" />
+						<newline/>
+						<field name="notas"  />
+						<newline/>
+						<field name="aprobado_por"  />
+						 </page>
+					 </notebook>
+                </form>
+			</field>
+        </record>
+		
+        <record id="action_laboratorio_producto" model="ir.actions.act_window">
+            <field name="name">Caracteristicas tecnicas productos</field>
+            <field name="res_model">product.laboratorio</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field eval="False" name="view_id"/>
+            <field name="help">Contiene la informacion tecnica y documentacion para los articulos base en Solvmex.</field>
+        </record>
+        <menuitem id="base.laboratorio_producto" name="Documentacion productos"
+            parent="base.menu_base_laboratorio" sequence="1"
+            />
+        <menuitem action="action_laboratorio_producto" id="menu_action_esp_producto" parent="base.laboratorio_producto"/>
+    </data>
+</openerp>

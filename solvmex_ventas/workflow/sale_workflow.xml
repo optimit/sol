@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="act_confirmado" model="workflow.activity">
+            <field name="wkf_id" ref="sale.wkf_sale"/>
+            <field name="kind">function</field>
+            <field name="action">write({'state':'confirmado'})</field>
+            <field name="name">confirmado</field>
+        </record>
+        <record id="act_ventas" model="workflow.activity">
+            <field name="wkf_id" ref="sale.wkf_sale"/>
+            <field name="kind">function</field>
+            <field name="action">valida_ventas()</field>
+            <field name="name">ventas</field>
+        </record>
+        <record id="act_credito" model="workflow.activity">
+            <field name="wkf_id" ref="sale.wkf_sale"/>
+            <field name="kind">function</field>
+            <field name="action">valida_credito()</field>
+            <field name="name">credito</field>
+        </record>
+        <record id="act_ventas_c" model="workflow.activity">
+            <field name="wkf_id" ref="sale.wkf_sale"/>
+            <field name="kind">function</field>
+            <field name="action">cancela_ventas()</field>
+            <field name="name">cancela_ventas</field>
+        </record>
+        <record id="act_credito_c" model="workflow.activity">
+            <field name="wkf_id" ref="sale.wkf_sale"/>
+            <field name="kind">function</field>
+            <field name="action">cancela_credito()</field>
+            <field name="name">cancela_credito</field>
+        </record>
+        <record id="trans_draft_confirmado" model="workflow.transition">
+            <field name="act_from" ref="sale.act_draft"/>
+            <field name="act_to" ref="act_confirmado"/>
+            <field name="signal">confirmar</field>
+        </record>
+        <record id="trans_draft_ventas" model="workflow.transition">
+            <field name="act_from" ref="act_confirmado"/>
+            <field name="act_to" ref="act_ventas"/>
+            <field name="signal">autoriza_ventas</field>
+        </record>
+        <record id="trans_ventas_credito" model="workflow.transition">
+            <field name="act_from" ref="act_ventas"/>
+            <field name="act_to" ref="sale.act_router"/>
+            <field name="signal">autoriza_credito</field>
+        </record>
+		
+        <record id="trans_draft_ventas_c" model="workflow.transition">
+            <field name="act_from" ref="act_confirmado"/>
+            <field name="act_to" ref="act_ventas_c"/>
+            <field name="signal">cancela_ventas</field>
+        </record>
+        <record id="trans_ventas_credito_c" model="workflow.transition">
+            <field name="act_from" ref="act_ventas"/>
+            <field name="act_to" ref="act_credito_c"/>
+            <field name="signal">cancela_credito</field>
+        </record>
+        <record id="trans_credito_router" model="workflow.transition">
+            <field name="act_from" ref="act_credito"/>
+            <field name="act_to" ref="sale.act_router"/>
+            <field name="signal">order_confirm</field>
+        </record>
+    </data>
+</openerp>

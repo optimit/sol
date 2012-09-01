@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<openerp>
+    <data>
+        <record id="stock_move_sale_tree_solvmex" model="ir.ui.view">
+            <field name="name">stock.move.tree.solvmex</field>
+            <field name="model">stock.move</field>
+            <field name="type">tree</field>
+            <field name="inherit_id" ref="stock.view_move_tree_reception_picking"/>
+            <field name="arch" type="xml">
+            <field name="date" position="replace"/>
+            <field name="picking_id" position="replace">
+            <field name="picking_id" invisible="1"/>
+            </field>
+            <field name="prodlot_id" position="replace">
+            <field name="prodlot_id"  invisible="1"/>
+            </field>
+            <field name="tracking_id" position="replace">
+            <field name="tracking_id"  invisible="1"/>
+            </field>
+            <field name="product_uom" position="replace">
+            <field name="product_uos"  string="Unidad venta"/>
+            </field>
+            <field name="product_qty" position="replace">
+            <field name="product_uos_qty"  string="Unidad venta"/>
+            </field>
+            <button name="setlast_tracking" position="replace">
+            <button name="setlast_tracking"  invisible="1"/>
+            </button>
+            <button name="298" position="replace">
+            <button name="298" invisible="1"/>
+            </button>
+            <button name="306" position="replace">
+            <button name="306" invisible="1"/>
+            </button>
+			<field name="product_id" position="after">
+			<field name="name" string="Etiquetar como:" />
+			 </field>
+            <field name="state" position="replace">
+                    <field name="forma_envio"/>
+                    <field name="tambores"/>
+                    <field name="cantidad_tambor"/>
+                    <field name="segundo_viaje"/>
+                    <field name="date_expected"/>
+                    <field name="state"/>
+            </field>
+
+            </field>
+        </record>
+
+        <record id="stock_move_sale_solvmex" model="ir.ui.view">
+            <field name="name">stock.move.form.solvmex</field>
+            <field name="model">stock.move</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="stock.view_move_form"/>
+            <field name="arch" type="xml">
+				<xpath expr="/form/group/field[@name='name']"  position="replace"/>
+                 <xpath expr="/form/group/field[@name='product_id']"  position="before">
+				 <field name="name" string="Etiquetar como:" colspan="4"/>
+				 <newline/>
+				 </xpath>
+                 <xpath expr="/form/group/field[@name='picking_id']"  position="after">
+                    <separator colspan="4" string="Informacion del pedido"/>
+                    <field name="corte_id" colspan="2"/>
+                    <field name="forma_envio" colspan="2"/>
+                    <field name="tambores" colspan="2"/>
+                    <field name="cantidad_tambor" colspan="2"/>
+                    <field name="segundo_viaje" colspan="2"/>
+                </xpath>
+				<xpath expr="/form/group/field[@name='date']"  position="replace"/>
+				<xpath expr="/form/group/field[@name='address_id']"  position="replace"/>
+				<xpath expr="/form/group/field[@name='date_expected']"  position="after">
+				<separator colspan="4" string="Comentarios de ventas"/>
+				<field name="note" colspan="2"/>
+				</xpath>
+            </field>
+        </record>
+    </data>
+</openerp>

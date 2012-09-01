@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_impresion_corte_solvmex" model="ir.ui.view">
+            <field name="name">Impresion de corte laboratorio</field>
+            <field name="model">laboratorio.corte.impresion</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+             <form string="Impresion de corte">
+
+                 <separator string="Impresion de listado de pedidos (corte diario)" colspan="6"/>
+                 <button name="imprimir_corte" string="Listado detallado" type="object" icon="terp-gtk-go-back-rtl"/>
+                 <button name="imprimir_corte_detalle" string="Resumen por producto" type="object" icon="terp-gtk-go-back-rtl"/>
+				 <newline/>
+				 <separator string="Impresion o envio de certificados" colspan="6"/>
+                 <button name="imprimir_certificados" string="Lista de certificados en este corte" type="object" icon="terp-gtk-go-back-rtl"/>
+				 <newline/>
+				 <separator string="Impresion etiquetas" colspan="6"/>
+                 <button name="imprimir_etiquetas" string="Etiquetas para tambores" type="object" icon="terp-gtk-go-back-rtl"/>
+				 <newline/>
+                 <button special="cancel" string="Cancel" icon="gtk-cancel"/>
+            </form>
+            </field>
+        </record>
+
+        <record id="action_view_impresion_corte_solvmex" model="ir.actions.act_window">
+            <field name="name">Impresion de corte</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">laboratorio.corte.impresion</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_impresion_corte_solvmex"/>
+            <field name="target">new</field>
+        </record>
+
+        <record model="ir.values" id="action_view_impresion_corte_solvmex_value">
+            <field name="model_id" ref="model_laboratorio_corte" />
+            <field name="name">Impresion de corte</field>
+            <field name="key2">client_action_multi</field>
+            <field name="value" eval="'ir.actions.act_window,' + str(ref('action_view_impresion_corte_solvmex'))" />
+            <field name="key">action</field>
+            <field name="model">laboratorio.corte</field>
+        </record>
+    </data>
+</openerp>

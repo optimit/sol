@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<openerp>
+    <data>
+        <record id="view_programacion_cobros_tree" model="ir.ui.view">
+            <field name="name">credito.programacion_cobros.solvmex.tree</field>
+            <field name="model">credito.programacion_cobros</field>
+            <field name="type">tree</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <tree string="Programacion de cobros" >
+					<field name="pedido" />
+                    <field name="name"/>
+					<field name="cliente_id"/>
+                    <field name="fecha_vencimiento"/>
+                    <field name="fecha_pago"/>
+					<field name="importe"/>
+                    <field name="divisa"/>
+                    <field name="cobrador_id"/>
+                    <field name="motivo_visita" />
+                </tree>
+            </field>
+        </record>
+        <record id="view_programacion_cobros_filter" model="ir.ui.view">
+            <field name="name">credito.programacion_cobros.solvmex.select</field>
+            <field name="model">credito.programacion_cobros</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Buscar rutas de cobro">
+				<field name="name"/>
+				<field name="cliente_id"/>
+				<field name="pedido"/>
+				<field name="fecha_pago"/>
+				<field name="fecha_vencimiento"/>
+				<newline/>
+                    <group expand="0" string="Agrupar por..." groups="base.group_extended">
+					<filter string="Cliente" icon="terp-personal" domain="[]" context="{'group_by':'cliente_id'}"/>
+					<filter string="Ruta de cobro" icon="terp-personal" domain="[]" context="{'group_by':'cobrador_id'}"/>
+					</group>
+               </search>
+            </field>
+        </record>
+		<record id="programacion_cobros_solvmex" model="ir.ui.view">
+            <field name="name">credito.programacion_cobros.solvmex.form.inherit</field>
+            <field name="model">credito.programacion_cobros</field>
+            <field name="type">form</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+			<form string="Programacion de cobros">
+                    <field name="name" colspan="2" on_change="onchange_name(name)" required="1"/>
+					<field name="motivo_visita" required="1"/>
+					<field name="pedido" />
+					<newline/>
+					<field name="cliente_id"/>
+					<field name="codigo_cliente"/>
+					<field name="importe"/>
+                    <field name="divisa"/>
+					<separator colspan="4" string="Fechas"/>
+                    <field name="fecha_vencimiento"/>
+                    <field name="fecha_pago" required="1"/>
+                    <field name="dias_atraso" />
+                    <field name="cobrador_id"/>
+					<newline/>
+                    <field name="comentarios" colspan="4"/>
+
+            </form>
+			</field>
+        </record>
+        <record id="action_programacion_cobros" model="ir.actions.act_window">
+            <field name="name">Programacion de cobros</field>
+            <field name="res_model">credito.programacion_cobros</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+			<field name="search_view_id" ref="view_programacion_cobros_filter"/>
+            <field eval="False" name="view_id"/>
+            <field name="help">Ayuda a reprogramar la fecha de cobro de acuerdo a los dias de pago del cliente.</field>
+        </record>
+        <menuitem id="base.programacion_cobros" name="Programacion de cobros"
+            parent="base.menu_base_partner" sequence="1"
+            />
+        <menuitem action="action_programacion_cobros" id="menu_action_invoice_tree1" parent="base.programacion_cobros"/>
+
+		
+		<record id="datos_banco_solvmex" model="ir.ui.view">
+            <field name="name">res.partner.bank.solvmex.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit">account.view_partner_property_form</field>
+            <field name="type">form</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+				<xpath expr="//field[@name='bank_ids']" position="replace"> 
+                    <field colspan="4" context="{'address': address}" name="bank_ids" nolabel="1">
+                        <form string="Bank account">
+                            <field name="partner_id" on_change="onchange_partner_id(partner_id)"/>
+                            <group name="owner" colspan="2" col="2">
+                            <field name="state"/>
+                            <newline/>
+                            <field name="bank" on_change="onchange_bank_id(bank)" groups="base.group_extended"/>
+                            <field name="acc_number"/>
+                            <newline/>
+                            </group>
+                        </form>
+                        <tree string="Bank Details">
+                            <field name="sequence" invisible="1"/>
+                            <field name="acc_number"/>
+                            <field name="bank_name"/>
+                        </tree>
+                    </field>
+				</xpath>
+			</field>
+        </record>
+    </data>
+</openerp>

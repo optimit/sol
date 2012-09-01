@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data noupdate="0">
+        <record model="ir.module.category" id="module_category_solvmex">
+            <field name="name">Solvmex</field>
+            <field name="sequence">110</field>
+        </record>
+    <record id="base.contabilidad" model="res.groups">
+        <field name="name">Contabilidad</field>
+        <field name="category_id" ref="module_category_solvmex"/>
+    </record>
+
+    <record id="base.credito" model="res.groups">
+        <field name="name">Credito</field>
+        <field name="category_id" ref="module_category_solvmex"/>
+    </record>
+
+    <record id="base.coordinador_ventas" model="res.groups">
+        <field name="name">Coordinador ventas</field>
+        <field name="category_id" ref="module_category_solvmex"/>
+    </record>
+
+    <record id="base.vendedor" model="res.groups">
+        <field name="name">Vendedor</field>
+        <field name="category_id" ref="module_category_solvmex"/>
+    </record>
+
+    <record id="base.laboratorio" model="res.groups">
+        <field name="name">Laboratorio</field>
+        <field name="category_id" ref="module_category_solvmex"/>
+    </record>
+
+
+</data>
+</openerp>
