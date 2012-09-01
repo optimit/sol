@@ -21,7 +21,8 @@
 
 require_once('tcpdf/config/lang/eng.php');
 require_once('tcpdf/tcpdf.php');
-
+//Conexion a BD
+require_once('parametros.php');
 require_once "Mail.php";
 require_once "Mail/mime.php";
 
@@ -42,7 +43,7 @@ if (isset ($_GET['envio_mail'])){
 //Es el ID de la tabla stock_move.
 if (isset ($_GET['stock_move_id'])){
 	$stock_move_id = $_GET['stock_move_id'];
-$conexion= pg_connect("host=192.168.1.4 port=5432 dbname=solvmex user=postgres password=Base#$DF") 
+$conexion= pg_connect("host=$host port=$port dbname=$dbname user=$user password=$password") 
 	   or die ("Nao consegui conectar ao PostGres --> " . pg_last_error($conn)); 
 		$query = "SELECT stock_move.name, product_laboratorio.lote,stock_move.origin, aprobado_por, notas, analisis,observaciones,stock_move.partner_id,
 		stock_move.id,

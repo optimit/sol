@@ -17,13 +17,14 @@ function tiene_etiqueta($producto,$conexion ) {
 return ($res);
 }
 
-
+//Conexion a BD
+require_once('parametros.php');
 //Es el ID de la tabla stock_move.
 if (isset ($_GET['documentos'])){
 	$documentos = $_GET['documentos'];
 	$documentos = str_replace('[','',$documentos);
 	$documentos = str_replace(']','',$documentos);
-$conexion= pg_connect("host=192.168.1.4 port=5432 dbname=solvmex user=postgres password=Base#$DF") 
+$conexion= pg_connect("host=$host port=$port dbname=$dbname user=$user password=$password") 
 	   or die ("Nao consegui conectar ao PostGres --> " . pg_last_error($conn)); 
 		$query = "SELECT stock_move.id,stock_move.origin,stock_move.cantidad_tambor,
 		product_product.name_template, stock_move.partner_id, stock_move.product_id  FROM product_product,stock_move

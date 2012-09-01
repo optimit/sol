@@ -13,7 +13,8 @@
 //============================================================+
 require_once "Mail.php";
 require_once "Mail/mime.php";
-
+//Conexion a BD
+require_once('parametros.php');
 if (isset ($_GET['documentos'])){
 
 
@@ -23,7 +24,7 @@ $documentos = str_replace("]","",$documentos);
 $documentos = explode(",", $documentos);
 require_once('tcpdf/config/lang/eng.php');
 require_once('tcpdf/tcpdf.php');
-$conexion= pg_connect("host=192.168.1.4 port=5432 dbname=solvmex user=postgres password=Base#$DF") 
+$conexion= pg_connect("host=$host port=$port dbname=$dbname user=$user password=$password") 
    or die ("Nao consegui conectar ao PostGres --> " . pg_last_error($conn)); 
 // SE CREA EL DOCUMENTO CON FORMATO HORIZONTAL
 //define ('PDF_PAGE_ORIENTATION', 'L');
